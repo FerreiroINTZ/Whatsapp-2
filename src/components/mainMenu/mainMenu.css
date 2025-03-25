@@ -1,0 +1,27 @@
+#mainMenu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    /* background: red; */
+    width: 100vw;
+    height: 100vh;
+    font-size: 60px;
+
+    p{
+        font-family: "Helvetica", serif;
+    }
+
+    #whatsapp2Image{
+        display: flex;
+        justify-content: center ;
+        align-items: center;
+        background: #000;
+        border-radius: 100px;
+
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
