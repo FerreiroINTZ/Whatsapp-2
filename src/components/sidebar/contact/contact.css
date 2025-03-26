@@ -1,0 +1,35 @@
+.contacts-card{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding: 20px 0px;
+    height: fit-content;
+    border-bottom: 2px solid #3B3B3B;
+    cursor: pointer;
+
+    &:hover{
+        background: #3c3c3c;
+        .usersPohtos, .userContact{
+            transform: scale(1.05);
+            transform: translateX(10px);
+        }
+    }
+
+    .usersPohtos{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 15px;
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        background: #fff;
+        transition: .3s;
+    }
+    
+    .userContact{
+        font-size: 20px;
+        transition: .3s;
+    }
+}
