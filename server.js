@@ -18,25 +18,34 @@ pool.query("SELECT NOW()")
 server.register(cors, {
     origin: "http://localhost:5173",
     methods: ["GET", "POST"],
+    // Necessario para poder pegar os Cookies
     credentials: "include"
 })
 
+// Gera um ID aleatorio
 console.log(randomUUID())
 
 server.register(cookies)
 
 server.get("/", async (request, reply) =>{
-    const promise = await new Promise(resolve => setTimeout(() => resolve("Resolvido!"), 3000))
-    return {text: promise}
+    // cookie do felipe
+    const cookie = "12njkfndu9wyf273husdfh78"
+    // reply.setCookie("whatsappCookie", cookie, {maxAge: 60*60*24*7*4}).send({cookie})
+    
+    try{
+        reply.send({cookie: request.cookies.whatsappCookie})
+    }catch{
+        reply.send({err: "Erro"})
+    }
 })
 
 server.get("/setUser", async (request, reply) =>{
     try{
-        const promise = await new Promise(resolve => setTimeout(() => resolve("Resolvido!"), 3000))
-        const id = randomUUID()
+        const id = "453e44d8-a19d-4a00-8733-3015b615866d"
+        // const id = randomUUID()
         const result = await pool.query("INSERT INTO usuarios (id, nome) VALUES ($1, 'Gabriel')", [id])
         console.log(result)
-        reply.setCookie("cookie", id).send({text: "Cookie definido e salvo no Banco!"})
+        reply.setCookie("whatsappCookie", id, {maxAge:60*60*24*7*4}).send({text: "Cookie definido e salvo no Banco!"})
     }catch{
         reply.send({text: "Algo deu errado!"})
     }
@@ -44,12 +53,35 @@ server.get("/setUser", async (request, reply) =>{
 
 server.post("/getUser", async (request, reply) =>{
     console.log("Request Body" ,request.body)
-    const {rows: userData} = await pool.query("SELECT * FROM usuarios WHERE id = $1", [request.body.cookie])
-    const queryChatsMembers = 
+    try{
+        const {rows: userData} = await pool.query("SELECT * FROM usuarios WHERE id = $1", [request.cookies.whatsappCookie])
+    
+        console.log("")
+        console.log("")
+        console.log("")
+        console.log("User data: ", userData)
+        console.log(request.cookies.whatsappCookie)
+        console.log("")
+        console.log("")
+        console.log("")
+        
+        // query responsavel por buscar os chates que tenham o usuario atual
+        const queryChatsMembers = 
         "SELECT * FROM membros JOIN usuarios ON user_id = id WHERE chate_id IN (SELECT chate_id FROM membros WHERE user_id = (SELECT id FROM usuarios WHERE nome = 'Gabriel')) AND usuarios.nome != 'Gabriel'"
-    const {rows: chats} = await pool.query(queryChatsMembers)
-    console.log("Result:", userData[0])
-    reply.send([userData[0], chats])
+        
+        const {rows: chats} = await pool.query(queryChatsMembers)
+        console.log("")
+        console.log("")
+        console.log("")
+        console.log(chats)
+        console.log("")
+        console.log("")
+        console.log("")
+        console.log("Result:", userData[0])
+        reply.send([userData[0], chats])
+    }catch{
+        reply.code(300).send({texto: "Erro no servidor!"})
+    }
 })
 
 server.post("/getMessages", async (request, reply) =>{
@@ -66,7 +98,7 @@ server.post("/sendMessage", async (request, reply) =>{
     console.log("")
     console.log("")
     console.log(rows)
-    // console.log(reqObject)
+    console.log(reqObject)
     console.log("")
     console.log("")
     console.log("")
