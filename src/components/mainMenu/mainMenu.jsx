@@ -8,8 +8,8 @@ export default function mainMenu({enter}){
         text: {y: 0, opacity: 1}, 
         logo: {y: 0, opacity: 1}})
 
+    // isso muda a animacaoa quando userData (enter) for recebido
     useEffect(() =>{
-        console.log(enter)
         // Muda animacao para a saida
         if(enter){
             setAnimateStates(x => {return {        
